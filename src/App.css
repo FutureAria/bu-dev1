@@ -1,0 +1,261 @@
+:root {
+  --blue: #2563eb;
+  --bg: #f8fafc;
+  --border: #e2e8f0;
+  --text: #0f172a;
+}
+
+body, html {
+  margin: 0; 
+  padding: 0;
+  height: 100%; 
+  width: 100%;
+  overflow: hidden;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.app-container {
+  display: flex; 
+  flex-direction: column;
+  height: 100vh; 
+  width: 100vw;
+  background-color: var(--bg);
+}
+
+.header {
+  height: 60px; 
+  background: white;
+  border-bottom: 1px solid var(--border);
+  display: flex; 
+  align-items: center; 
+  padding: 0 40px;
+  
+}
+
+main {
+  flex: 1; 
+  display: flex; 
+  flex-direction: column;
+  padding: 20px 40px; 
+  gap: 20px; 
+  min-height: 0;
+  overflow-y: scroll;
+}
+
+.filter-container {
+  background: white;
+  padding: 24px 40px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: space-between; /* 요소 간 간격 분산 */
+  gap: 40px; /* 요소 간 너비 확보 */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1; /* 가로로 균등하게 확장 */
+}
+
+.filter-label {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--blue);
+  margin-left: 4px;
+}
+
+/* 선택된 지역 표시 박스 */
+.selected-display {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--text);
+  padding: 10px 0;
+  border-bottom: 2px solid var(--border);
+  min-height: 28px;
+}
+
+/* 셀렉트 박스 스타일 */
+.select-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background-color: #f8fafc;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.select-input:focus {
+  border-color: var(--blue);
+  background-color: white;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.analyze-btn {
+  padding: 16px 40px;
+  background-color: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0; /* 버튼 크기 고정 */
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.analyze-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+}
+
+.analyze-btn:active {
+  transform: translateY(0);
+}
+
+/* --- 상단 필터부 --- */
+.filter-section {
+  background: white; 
+  padding: 20px 30px;
+  border-radius: 20px; 
+  border: 1px solid var(--border);
+  display: flex; 
+  align-items: flex-end; 
+  gap: 30px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+/* --- 대시보드 그리드: 분석 전후 크기 고정 핵심 --- */
+.dashboard-grid {
+  display: grid;
+  /* 지도 7.5 : 분석창 4.5 비율로 고정하여 분석창 너비를 넓게 확보 */
+  grid-template-columns: minmax(0, 7.5fr) minmax(0, 4.5fr);
+  gap: 24px; 
+  flex: 1; 
+  min-height: 0;
+}
+
+.map-view, .side-view {
+  background: white; 
+  border-radius: 32px;
+  border: 1px solid var(--border); 
+  overflow: hidden;
+  position: relative; 
+  display: flex; 
+  flex-direction: column;
+  min-width: 0; /* 콘텐츠가 너비를 밀어내는 것 방지 */
+}
+
+/* --- 분석 결과 스크롤 영역 --- */
+.scroll-area {
+  flex: 1; 
+  overflow-y: auto; 
+  overflow-x: hidden;
+  padding: 0 24px 24px;
+}
+
+.card {
+  background: white; 
+  border: 1px solid var(--border);
+  padding: 20px; 
+  border-radius: 20px; 
+  margin-bottom: 16px;
+}
+
+.score-hero {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: white; 
+  padding: 32px; 
+  border-radius: 24px;
+  text-align: center; 
+  margin-bottom: 20px;
+}
+
+/* --- 마커 라벨 및 클릭 범위 확장 --- */
+.marker-label {
+  padding: 8px 16px; 
+  background: white;
+  border: 2px solid var(--blue); 
+  border-radius: 20px;
+  font-weight: 800; 
+  color: var(--blue);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  cursor: pointer; 
+  white-space: nowrap;
+  outline: 15px solid transparent; /* 확장 클릭 영역 */
+}
+
+.marker-label.active {
+  background: #2563eb; 
+  color: white;       
+  border-color: #2eb4b5;
+  
+}
+
+.fade-in { 
+  animation: fadeIn 0.3s ease-out; 
+}
+
+/* 이후 내껑 */
+
+.buttons-container {
+  color: var(--blue-primary);
+}
+
+.header-button {
+  display: flex;
+  background-color: var(--blue);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.2)
+}
+
+.header-button:active {
+  transform: scale(0.95);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@keyframes fadeIn { 
+  from { 
+    opacity: 0; 
+  } to { 
+    opacity: 1; 
+  } 
+}
+
+/* 글씨 검은색 고정하고 싶은 부분들 */
+/* 모든 곳에서 쓰기 */
+/* {
+  color: var(--text);
+}
+

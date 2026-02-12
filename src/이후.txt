@@ -1,0 +1,70 @@
+import React, { useState } from 'react';
+import Map from './Map';
+import Group from './Group';
+import Result from './Result'; 
+// 1. Result.tsx에서 정의한 타입을 가져옵니다. (중복 정의 제거)
+import type { AnalysisResult } from './Result'; 
+import { SEOUL_DATA, CATEGORIES } from './Data';
+import type { District } from './Data';
+import './App.css';
+
+export default function App() {
+  const [selectedDistrict, setSelectedDistrict] = useState<District | null>(null);
+  // 2. 가져온 타입을 상태값에 적용합니다.
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+
+  const handleAnalyze = async (main: string, sub: string) => {
+    if (!selectedDistrict) {
+      alert("지도의 마커를 먼저 선택해주세요!");
+      return;
+    }
+
+    // 3. Result 인터페이스의 모든 속성(name, traffic 등)을 포함하여 데이터를 생성합니다.
+    const mockData: AnalysisResult = {
+      name: selectedDistrict.name, // 추가됨
+      suitability: selectedDistrict.suitability,
+      population: { 
+        total: selectedDistrict.population, 
+        mainAge: "2030세대 (42%)", 
+        timeSlots: [20, 45, 85, 100, 70, 40] 
+      },
+      market: { 
+        avgRent: selectedDistrict.rent, 
+        avgSales: "4,500만원", 
+        competition: selectedDistrict.suitability > 85 ? '보통' : '높음' 
+      },
+      traffic: { // 추가됨
+        subway: `${selectedDistrict.name}역 도보 5분`,
+        bus: "인근 정류장 8개소",
+        accessibility: "우수"
+      }
+    };
+
+    setAnalysisResult(mockData);
+  };
+
+  return (
+    <div className="app-wrapper">
+      <header className="header-container">
+        <h1 style={{ margin: 0, fontSize: '20px', fontWeight: 900 }}>AI 상권분석 시스템</h1>
+      </header>
+
+      <main style={{ maxWidth: '100%', margin: '0 auto', padding: '24px', boxSizing: 'border-box' }}>
+        <Group 
+          categories={CATEGORIES} 
+          selectedDistrictName={selectedDistrict?.name || null} 
+          onAnalyze={handleAnalyze} 
+        />
+
+        <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '24px', height: '650px', marginTop: '24px' }}>
+          <div className="map-container" style={{ gridColumn: 'span 8', borderRadius: '40px', border: '1px solid #e2e8f0', overflow: 'hidden', position: 'relative' }}>
+            <Map districts={SEOUL_DATA} onSelectDistrict={setSelectedDistrict} />
+          </div>
+          <aside className="analysis-sidebar" style={{ gridColumn: 'span 4', borderRadius: '40px', border: '1px solid #e2e8f0', overflow: 'hidden', backgroundColor: 'white' }}>
+            <Result result={analysisResult} />
+          </aside>
+        </div>
+      </main>
+    </div>
+  );
+}
